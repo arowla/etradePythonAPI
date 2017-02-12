@@ -13,17 +13,17 @@ This is an attempt to implement a python compatible version of the etrade API us
 
 # import client settings
 import etrade_settings
-client_Consumer_Key= etrade_settings.client_Consumer_Key
-client_Consumer_Secret= etrade_settings.client_Consumer_Secret
-sandboxMode = etrade_settings.sandboxMode
+oauth_consumer_key= etrade_settings.oauth_consumer_key
+consumer_secret= etrade_settings.consumer_secret
+sandmox_mode = etrade_settings.sandmox_mode
 
 
 def urlRoot():
   """
-  returns the root URL for the etrade API depending on sandboxMode <boolean>
+  returns the root URL for the etrade API depending on sandmox_mode <boolean>
   """
 
-  if sandboxMode:
+  if sandmox_mode:
     return 'https://etwssandbox.etrade.com/{}/sandbox/rest/{}.json'
   else:
     return 'https://etws.etrade.com/{}/rest/{}.json'
@@ -34,8 +34,8 @@ def getRequestToken():
 
   """
   request_token_url = '{}/{}/{}'.format('https://etws.etrade.com','oauth','request_token')
-  oauth = OAuth1Session(client_key=client_Consumer_Key, 
-                        client_secret=client_Consumer_Secret,
+  oauth = OAuth1Session(client_key=oauth_consumer_key, 
+                        client_secret=consumer_secret,
                         callback_uri='oob')
 
   fetch_response = oauth.fetch_request_token(request_token_url)
@@ -54,7 +54,7 @@ def authorizeToken(requestTokenResponse):
 
   resource_owner_key = requestTokenResponse['oauth_token']
   resource_owner_secret = requestTokenResponse['oauth_token_secret']
-  redirect_response = 'https://us.etrade.com/e/t/etws/authorize?key={}&token={}'.format(client_Consumer_Key,resource_owner_key)
+  redirect_response = 'https://us.etrade.com/e/t/etws/authorize?key={}&token={}'.format(oauth_consumer_key,resource_owner_key)
   
 
   # print 'go to this link for authorization:', redirect_response
@@ -119,8 +119,8 @@ def accessToken(requestTokenResponse, verifier = None):
     verifier = raw_input('Paste the login verifier code here: ')
 
   access_token_url = 'https://etws.etrade.com/oauth/access_token'
-  oauth = OAuth1Session(client_key = client_Consumer_Key,
-                          client_secret=client_Consumer_Secret,
+  oauth = OAuth1Session(client_key = oauth_consumer_key,
+                          client_secret=consumer_secret,
                           resource_owner_key=requestTokenResponse['oauth_token'],
                           resource_owner_secret=requestTokenResponse['oauth_token_secret'],
                           verifier=verifier)
@@ -145,8 +145,8 @@ def renewAccessToken():
     return {'Error': 'user_tokens.p file missing'}
 
 
-  oauth = OAuth1(client_key = client_Consumer_Key,
-                client_secret=client_Consumer_Secret,
+  oauth = OAuth1(client_key = oauth_consumer_key,
+                client_secret=consumer_secret,
                 resource_owner_key=user_tokens['oauth_token'],
                 resource_owner_secret=user_tokens['oauth_token_secret']
   )
@@ -169,19 +169,19 @@ def accessMethod(url, method = 'GET', payload = None):
     return {'Error': 'user_tokens.p file missing'}
 
 
-  # print user_tokens, client_Consumer_Key, client_Consumer_Secret
+  # print user_tokens, oauth_consumer_key, consumer_secret
 
 
   if method == 'GET':
-    oauth = OAuth1(client_key = client_Consumer_Key,
-                client_secret=client_Consumer_Secret,
+    oauth = OAuth1(client_key = oauth_consumer_key,
+                client_secret=consumer_secret,
                 resource_owner_key=user_tokens['oauth_token'],
                 resource_owner_secret=user_tokens['oauth_token_secret']
     )
     r = requests.get(url = url, auth=oauth)
   elif method == 'POST':
-    oauth = OAuth1(client_key = client_Consumer_Key,
-                client_secret=client_Consumer_Secret,
+    oauth = OAuth1(client_key = oauth_consumer_key,
+                client_secret=consumer_secret,
                 resource_owner_key=user_tokens['oauth_token'],
                 resource_owner_secret=user_tokens['oauth_token_secret']
     )

@@ -2,5 +2,4 @@
 build/
 dist/
 *.pyc
-etrade_settings.py
-*.p
+etradepy/settings.local.py
