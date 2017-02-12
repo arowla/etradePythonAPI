@@ -1,10 +1,6 @@
-
+.cache
+build/
+dist/
 *.pyc
-
 etrade_settings.py
-
-etrade_settings.py
-
-etrade_settings.py
-
 *.p

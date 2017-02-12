@@ -195,7 +195,7 @@ def accessMethod(url, method = 'GET', payload = None):
   try:
     result = json.loads(r.text.encode('ascii', 'ignore')  )
   except:
-    print 'problem parsing response as json...', r
+    print('problem parsing response as json...', r)
     result = r.content
 
   return result
@@ -297,7 +297,7 @@ def lookupProduct(company, assetType ='EQ'):
   url = urlRoot().format('market','productlookup') + '?' + \
    'company={}&'.format(company) + \
    'type={}'.format(assetType)
-  print url
+  print(url)
   return accessMethod(url)
 
 def getQuote(symbolStringCSV, detailFlag = 'ALL' ):
@@ -350,7 +350,7 @@ def listOrders(AcctNumber, marker = None):
   if numOfOrders == 0:
     return None
   elif 'marker' in resp['GetOrderListResponse']['orderListResponse']:
-    print 'there are more orders'
+    print('there are more orders')
     marker = resp['GetOrderListResponse']['orderListResponse']['marker']
     resp = resp + listOrders(AcctNumber, marker )
     return resp
@@ -597,7 +597,7 @@ def login():
   testState = listAccounts()
 
   if 'Error' in testState:
-    print 'trying to renew token...'
+    print('trying to renew token...')
     # try renewing access token first,
     renewAccessToken()
     testState = listAccounts()
@@ -605,7 +605,7 @@ def login():
   if 'Error' in testState:
   # if testState == {u'Error': {u'message': u'oauth_problem=token_expired'}} or testState == {u'Error': {u'message': u'oauth_problem=token_rejected'}} or testState == {u'Error': {u'message': u'Invalid access token used'}}:
     # if it doesn't work then try manual login process
-    print 'trying to manually login... '
+    print('trying to manually login... ')
     r = getRequestToken()
     authCode = authorizeToken(r)
     oauth_tokens = accessToken(r, verifier = authCode)
