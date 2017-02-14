@@ -2,5 +2,7 @@
 build/
 dist/
 *.pyc
-etradepy/settings.local.py
+etradepy/settings.py
 *.egg-info
+*.p
+*.log
